@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: cloudsapy.site
+  - host: kubeproj.cloudsapy.site
     http:
       paths:
       - path: /
