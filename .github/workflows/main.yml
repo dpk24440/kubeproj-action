@@ -80,13 +80,24 @@ jobs:
       - name: Configure kubectl
         run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
 
-      - name: Create Kubernetes Secret for ECR
+      #- name: Create Kubernetes Secret for ECR
+      #  run: |
+      #    kubectl create secret docker-registry regcred \
+      #      --docker-server=${{ secrets.REGISTRY }} \
+      #      --docker-username=AWS \
+      #      --docker-password=$(aws ecr get-login-password --region ${{ env.AWS_REGION }}) \
+      #      --docker-email=your-email@example.com
+      - name: Create or Update Kubernetes Secret for ECR
         run: |
+          if kubectl get secret regcred --namespace default; then
+             echo "Secret 'regcred' already exists. Updating it."
+             kubectl delete secret regcred --namespace default
+          fi
           kubectl create secret docker-registry regcred \
-            --docker-server=${{ secrets.REGISTRY }} \
-            --docker-username=AWS \
-            --docker-password=$(aws ecr get-login-password --region ${{ env.AWS_REGION }}) \
-            --docker-email=your-email@example.com
+             --docker-server=${{ secrets.REGISTRY }} \
+             --docker-username=AWS \
+             --docker-password=$(aws ecr get-login-password --region ${{ env.AWS_REGION }}) \
+             --docker-email=your-email@example.com
 
       - name: Deploy Helm
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.10
