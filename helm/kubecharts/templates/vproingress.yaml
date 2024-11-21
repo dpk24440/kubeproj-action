@@ -5,6 +5,8 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":8080}]'
+    nginx.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:005675003253:certificate/2b27bff7-f0b0-4571-8b82-2de978308062
+
     nginx.ingress.kubernetes.io/ssl-redirect: '443'      
 
 spec:
